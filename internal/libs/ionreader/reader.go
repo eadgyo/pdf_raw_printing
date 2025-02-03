@@ -1,15 +1,17 @@
 package ionreader
 
 import (
+	"bytes"
 	"fmt"
 
-	"github.com/amazon-ion/ion-go/ion"
+	"github.com/eadgyo-forked/ion-go/ion"
 )
 
 func ReadDouble(ion1 []byte, ion2 []byte) error {
 	reader1 := ion.NewReaderBytes(ion1)
 	reader2 := ion.NewReaderBytes(ion2)
-
+	v := bytes.Compare(ion1, ion2)
+	_ = v
 	return readerDouble(reader1, reader2)
 }
 
@@ -28,7 +30,7 @@ func readerDouble(reader1 ion.Reader, reader2 ion.Reader) error {
 			return err
 		}
 
-		if name1 != name2 {
+		if (name1 != nil || name2 != nil) && *name1.Text != *name2.Text {
 			return fmt.Errorf("different name")
 		}
 
@@ -78,7 +80,7 @@ func readerDouble(reader1 ion.Reader, reader2 ion.Reader) error {
 				panic(err)
 			}
 
-			if a2 != a1 {
+			if (a2 != nil || a1 != nil) && *a2.Text != *a1.Text {
 				return fmt.Errorf("different symbol")
 			}
 		case ion.BoolType:
@@ -95,22 +97,35 @@ func readerDouble(reader1 ion.Reader, reader2 ion.Reader) error {
 			}
 		case ion.IntType:
 			if name1 != nil && name1.Text != nil && *name1.Text == "page_index" {
-				if *name2.Text == "page_index" {
+				if *name2.Text != "page_index" {
 					return fmt.Errorf("different type of int page index")
 				}
-			} else {
-				val1, err := reader1.Int64Value()
-				if err != nil {
-					panic("Something went wrong while reading a Integer value: " + err.Error())
-				}
-				val2, err := reader2.Int64Value()
-				if err != nil {
-					panic("Something went wrong while reading a Integer value: " + err.Error())
-				}
+			}
 
-				if val1 != val2 {
-					return fmt.Errorf("different val1 val2")
-				}
+			size1, err := reader1.IntSize()
+			if err != nil {
+				return err
+			}
+			size2, err := reader2.IntSize()
+			if err != nil {
+				return err
+			}
+
+			if size1 != size2 {
+				return fmt.Errorf("not the same size")
+			}
+
+			val1, err := reader1.Int64Value()
+			if err != nil {
+				panic("Something went wrong while reading a Integer value: " + err.Error())
+			}
+			val2, err := reader2.Int64Value()
+			if err != nil {
+				panic("Something went wrong while reading a Integer value: " + err.Error())
+			}
+
+			if *val1 != *val2 {
+				return fmt.Errorf("different val1 val2")
 			}
 
 		case ion.StringType:
@@ -122,7 +137,7 @@ func readerDouble(reader1 ion.Reader, reader2 ion.Reader) error {
 			if err != nil {
 				panic("Something went wrong while reading a String value: " + err.Error())
 			}
-			if val1 != val2 {
+			if *val1 != *val2 {
 				return fmt.Errorf("different string value")
 			}
 		case ion.FloatType:
@@ -135,7 +150,7 @@ func readerDouble(reader1 ion.Reader, reader2 ion.Reader) error {
 				panic(err)
 			}
 
-			if val1 != val2 {
+			if *val1 != *val2 {
 				return fmt.Errorf("different float value")
 			}
 		case ion.StructType:
@@ -147,7 +162,10 @@ func readerDouble(reader1 ion.Reader, reader2 ion.Reader) error {
 			if err != nil {
 				panic(err)
 			}
-			readerDouble(reader1, reader2)
+			err = readerDouble(reader1, reader2)
+			if err != nil {
+				return err
+			}
 			err = reader1.StepOut()
 			if err != nil {
 				panic(err)
@@ -167,7 +185,10 @@ func readerDouble(reader1 ion.Reader, reader2 ion.Reader) error {
 				panic(err)
 			}
 
-			readerDouble(reader1, reader2)
+			err = readerDouble(reader1, reader2)
+			if err != nil {
+				return err
+			}
 
 			err = reader1.StepOut()
 			if err != nil {
@@ -187,7 +208,10 @@ func readerDouble(reader1 ion.Reader, reader2 ion.Reader) error {
 				panic(err)
 			}
 
-			readerDouble(reader1, reader2)
+			err = readerDouble(reader1, reader2)
+			if err != nil {
+				return err
+			}
 
 			err = reader1.StepOut()
 			if err != nil {

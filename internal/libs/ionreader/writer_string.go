@@ -3,7 +3,7 @@ package ionreader
 import (
 	"strings"
 
-	"github.com/amazon-ion/ion-go/ion"
+	"github.com/eadgyo-forked/ion-go/ion"
 )
 
 func IonToString(ion1 []byte) (string, error) {
@@ -121,7 +121,7 @@ func writeFromReaderToWriter(reader ion.Reader, writer ion.Writer) {
 			if err != nil {
 				panic(err)
 			}
-			err = writer.BeginList()
+			err = writer.BeginSexp()
 			if err != nil {
 				panic(err)
 			}
@@ -130,7 +130,7 @@ func writeFromReaderToWriter(reader ion.Reader, writer ion.Writer) {
 			if err != nil {
 				panic(err)
 			}
-			err = writer.EndList()
+			err = writer.EndSexp()
 			if err != nil {
 				panic(err)
 			}

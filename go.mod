@@ -3,7 +3,10 @@ module pdf_raw_printing
 go 1.23.1
 
 require (
-	github.com/amazon-ion/ion-go v1.5.0
+	github.com/eadgyo-forked/ion-go v1.5.1
+	github.com/google/uuid v1.6.0
+	github.com/ledongthuc/pdf v0.0.0-20240201131950-da5b75280b06
+	github.com/mattn/go-sqlite3 v1.14.24
 	github.com/stretchr/testify v1.6.1
 )
 
