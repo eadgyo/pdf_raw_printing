@@ -183,10 +183,12 @@ func writeElement(writer ion.Writer, vt reflect.Value, wion *Wion) error {
 		mustnot(wion.typeWion)
 		return writer.WriteFloat(vt.Float())
 	case reflect.String:
-		mustnot(wion.typeWion)
+		if wion.typeWion == "symbol" {
+			return writer.WriteSymbolFromString(vt.String())
+		}
 		return writer.WriteString(vt.String())
 	case reflect.Interface:
-		panic("unhandeld here for now!")
+		return writeStruct(writer, vt.Elem())
 	case reflect.Struct:
 		return writeStruct(writer, vt)
 	case reflect.Map:

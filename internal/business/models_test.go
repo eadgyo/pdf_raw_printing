@@ -56,14 +56,131 @@ func TestSerialize(t *testing.T) {
 		{
 			name:     "book_metadata",
 			expected: "e00100eaee02dc8203eade02d603ebbe02d1ded403ef8e956b696e646c655f7469746c655f6d657461646174610282beb7dea503ec87626f6f6b5f696402b38e97644e64724b68566a523236745f635a5f7548596b4f4130de8e03ec857469746c6502b383747474deed03ef8e9a6b696e646c655f6361706162696c6974795f6d657461646174610282becbde9703ec8e8f796a5f66697865645f6c61796f757402b32101de9c03ec8e9467726170686963616c5f686967686c696768747302b32101de9203ec8b796a5f74657874626f6f6b02b32101deb503ef8e956b696e646c655f65626f6f6b5f6d657461646174610282be98de9603ec8973656c656374696f6e02b387656e61626c6564ded303ef8e956b696e646c655f61756469745f6d657461646174610282beb6de9403ec8c66696c655f63726561746f7202b3824b43de9e03ec8e8f63726561746f725f76657273696f6e02b388312e39332e302e30",
+			v: BookMetadata{
+				CatagoerisedMetadata: []CategorisedMetadata{
+					{
+						Category: "kindle_title_metadata",
+						Metadata: []any{
+							BMetadata[string]{
+								Key:   "book_id",
+								Value: "dNdrKhVjR26t_cZ_uHYkOA0",
+							},
+							BMetadata[string]{
+								Key:   "title",
+								Value: "ttt",
+							},
+						},
+					},
+					{
+						Category: "kindle_capability_metadata",
+						Metadata: []any{
+							BMetadata[int]{
+								Key:   "yj_fixed_layout",
+								Value: 1,
+							},
+							BMetadata[int]{
+								Key:   "graphical_highlights",
+								Value: 1,
+							},
+							BMetadata[int]{
+								Key:   "yj_textbook",
+								Value: 1,
+							},
+						},
+					},
+					{
+						Category: "kindle_ebook_metadata",
+						Metadata: []any{
+							BMetadata[string]{
+								Key:   "selection",
+								Value: "enabled",
+							},
+						},
+					},
+					{
+						Category: "kindle_audit_metadata",
+						Metadata: []any{
+							BMetadata[string]{
+								Key:   "file_creator",
+								Value: "KC",
+							},
+							BMetadata[string]{
+								Key:   "creator_version",
+								Value: "1.93.0.0",
+							},
+						},
+					},
+				},
+			},
 		},
 		{
 			name:     "book_navigation",
 			expected: "e00100eaeea7820385bea2dea001b272015f0388be97ee95820387de9001eb71d401efe68204d6826e4101f7b0",
+			v: BookNavigations{
+				BookNavigations: []BookNavigation{
+					{
+						ReadingOrderName: "default",
+						NavContainers: []NavContainer{
+							{
+								NavType:          "toc",
+								NavContainerName: "nA",
+								Entries:          []string{},
+							},
+						},
+					},
+				},
+			},
 		},
 		{
 			name:     "c0",
 			expected: "e00100eaeefa820284def501aee68204d6826330018dbee8eea78204e0dea204d6e68204d682743101b0e68204d6826c3201abc372020e019c720143019f72010eeebd8204e0deb804d6e68204d6827433b8d902b3216402b272013a01b0e68204d6826c32c2d902b3216402b272013a01abc372020d019c720145019f72010e",
+			v: Section{
+				SectionName: "c0",
+				PageTemplates: []any{
+					PageTemplate1{
+						Id:        "t1",
+						StoryName: "l2",
+						Condition: []Symbol{
+							{
+								Value: "isPortrait",
+							},
+						},
+						Layout: Symbol{
+							Value: "vertical",
+						},
+						TypePage: Symbol{
+							Value: "container",
+						},
+					},
+					PageTemplate2{
+						Id: "t3",
+						Width: Width{
+							Value: 100,
+							Unit: Symbol{
+								Value: "percent",
+							},
+						},
+						StoryName: "l2",
+						FixedWidth: Width{
+							Value: 100,
+							Unit: Symbol{
+								Value: "percent",
+							},
+						},
+						Condition: []Symbol{
+							{
+								Value: "isLandscape",
+							},
+						},
+						Layout: Symbol{
+							Value: "overflow",
+						},
+						TypePage: Symbol{
+							Value: "container",
+						},
+					},
+				},
+			},
 		},
 		{
 			name:     "c0-ad",
@@ -181,9 +298,6 @@ func TestSerialize(t *testing.T) {
 	}
 
 	for _, ts := range tests {
-		if ts.v == nil {
-			continue
-		}
 
 		t.Run(ts.name, func(t *testing.T) {
 			hexenc1, err := hex.DecodeString(ts.expected)
@@ -203,10 +317,8 @@ func TestSerialize(t *testing.T) {
 
 			require.NoError(t, err)
 			hexenc := hex.EncodeToString(hash24)
-
-			require.NoError(t, ionreader.ReadDouble(hexenc1, hash24))
-
 			require.Equal(t, expectedString, hashString)
+			require.NoError(t, ionreader.ReadDouble(hexenc1, hash24))
 			require.Equal(t, ts.expected, hexenc)
 		})
 	}
