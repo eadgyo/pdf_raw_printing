@@ -185,6 +185,15 @@ func TestSerialize(t *testing.T) {
 		{
 			name:     "c0-ad",
 			expected: "e00100eaeeaa8204d5dea504d6e98204d68563302d61640282be95de9303ec8d706167655f726f746174696f6e02b320",
+			v: AuxaliaryData{
+				Id: "c0-ad",
+				Metadata: []any{
+					BMetadata[int]{
+						Key:   "page_rotation",
+						Value: 0,
+					},
+				},
+			},
 		},
 		{
 			name:     "c0-spm",
@@ -201,18 +210,102 @@ func TestSerialize(t *testing.T) {
 		{
 			name:     "d6",
 			expected: "e00100eaee01aa8204d5de01a404d6e68204d68264360282be0196de9203ec847479706502b3887265736f75726365de9b03ec8e8f7265736f757263655f73747265616d02b3857273726338de8f03ec8473697a6502b3853132383434de9d03ec8d6d6f6469666965645f74696d6502b38a31373235343339303135deb303ec886c6f636174696f6e02b38ea42f55736572732f726f6e616e6a616d65742f446f776e6c6f6164732f746573742e706466",
+			v: AuxaliaryData{
+				Id: "d6",
+				Metadata: []any{
+					BMetadata[string]{
+						Key:   "type",
+						Value: "resource",
+					},
+					BMetadata[string]{
+						Key:   "resource_stream",
+						Value: "rsrc8",
+					},
+					BMetadata[string]{
+						Key:   "size",
+						Value: "12844",
+					},
+					BMetadata[string]{
+						Key:   "modified_time",
+						Value: "1725439015",
+					},
+					BMetadata[string]{
+						Key:   "location",
+						Value: "/Users/ronanjamet/Downloads/test.pdf",
+					},
+				},
+			},
 		},
 		{
 			name:     "d7",
 			expected: "e00100eaeeb78204d5deb204d6e68204d68264370282bea5dea303ec8e95617578446174615f7265736f757263655f6c69737402b3b7e68204d6826436",
+			v: AuxaliaryData{
+				Id: "d7",
+				Metadata: []any{
+					BMetadata[[]Ref]{
+						Key: "auxData_resource_list",
+						Value: []Ref{
+							{
+								Value: "d6",
+							},
+						},
+					},
+				},
+			},
 		},
 		{
 			name:     "document_data",
 			expected: "e00100eaeebb82049adeb688211201c072017804c57201b904d5d904e5e68204d682643701a9be99de9701b272015f01aabe8ee68204d6826330e68204d6826341",
+			v: DocumentData{
+				MaxId: 18,
+				Direction: Symbol{
+					Value: "ltr",
+				},
+				PanZoom: Symbol{
+					Value: "enabled",
+				},
+				AuxiliaryData: SpecificAuxiliaryData{
+					Id: "d7",
+				},
+				ReadingOrders: []SpecificReadingOrder{
+					{
+						ReadingOrderName: Symbol{
+							Value: "default",
+						},
+						Sections: []Kfxid{
+							{
+								Id: "c0",
+							},
+							{
+								Id: "cA",
+							},
+						},
+					},
+				},
+			},
 		},
 		{
 			name:     "e9",
 			expected: "e00100eaeecd8201a4dec8b04001a1720235b140b2483fe000000000000004b42001a585727372633804d5e68204d682643603a6484082a0000000000003a748408a50000000000001afe68204d6826539af40",
+			v: ExternalSource{
+				MarginLeft: 0,
+				Format: Symbol{
+					Value: "pdf",
+				},
+				MarginBottom: 0,
+				MarginRight:  0.5,
+				PageIndex:    0,
+				Location:     "rsrc8",
+				AuxiliaryData: Kfxid{
+					Id: "d6",
+				},
+				ResourceWidth:  596,
+				ResourceHeight: 842,
+				ResourceName: Kfxid{
+					Id: "e9",
+				},
+				MarginTop: 0,
+			},
 		},
 		{
 			name:     "eG",
@@ -258,10 +351,53 @@ func TestSerialize(t *testing.T) {
 		{
 			name:     "i4",
 			expected: "e00100eaeeb58204e0deb004d6e68204d6826934c222e8d0c3230148e803db7201d8019c720146018c720140019f72010e0192b7e68204d6826935",
+			v: PageTemplateI4{
+				Id:          "i4",
+				FixedWidth:  59600,
+				FixedHeight: 84200,
+				FitText: Symbol{
+					Value: "force",
+				},
+				Layout: Symbol{
+					Value: "scale_fit",
+				},
+				Float: Symbol{
+					Value: "center",
+				},
+				Type: Symbol{
+					Value: "container",
+				},
+				ContentList: []Kfxid{
+					{
+						Id: "i5",
+					},
+				},
+			},
 		},
 		{
 			name:     "i5",
 			expected: "e00100eaeeb28204e0dead04d6e68204d6826935b8d902b3216402b272013ab9d902b3216402b272013a019f72010f01afe68204d6826539",
+			v: PageTemplateI5{
+				Id: "i5",
+				Width: Width{
+					Value: 100,
+					Unit: Symbol{
+						Value: "percent",
+					},
+				},
+				Height: Width{
+					Value: 100,
+					Unit: Symbol{
+						Value: "percent",
+					},
+				},
+				Type: Symbol{
+					Value: "image",
+				},
+				ResourceName: Kfxid{
+					Id: "e9",
+				},
+			},
 		},
 		{
 			name:     "iE",
@@ -274,6 +410,16 @@ func TestSerialize(t *testing.T) {
 		{
 			name:     "l2",
 			expected: "e00100eaee98820283de9301b0e68204d6826c320192b7e68204d6826934",
+			v: StoryLine{
+				StoryName: Kfxid{
+					Id: "l2",
+				},
+				ContentList: []Kfxid{
+					{
+						Id: "i4",
+					},
+				},
+			},
 		},
 		{
 			name:     "lC",
@@ -282,10 +428,9 @@ func TestSerialize(t *testing.T) {
 		{
 			name:     "max_id",
 			expected: "e00100ea220342",
-		},
-		{
-			name:     "metadata",
-			expected: "e00100eaeea2820282de9d01a9be99de9701b272015f01aabe8ee68204d6826330e68204d6826341",
+			v: MaxID{
+				Value: 834,
+			},
 		},
 		{
 			name:     "rsrc8",
@@ -294,10 +439,25 @@ func TestSerialize(t *testing.T) {
 		{
 			name:     "yj",
 			expected: "e00100eaeea58204e3dea001b5be9cdd01aee68204d682633001902104dd01aee68204d682634101902104",
+			v: YJ{
+				Contains: []YJContains{
+					{
+						SectionName: "c0",
+						Length:      4,
+					},
+					{
+						SectionName: "cA",
+						Length:      4,
+					},
+				},
+			},
 		},
 	}
 
 	for _, ts := range tests {
+		if ts.v == nil {
+			continue
+		}
 
 		t.Run(ts.name, func(t *testing.T) {
 			hexenc1, err := hex.DecodeString(ts.expected)

@@ -97,35 +97,35 @@ func readerDouble(reader1 ion.Reader, reader2 ion.Reader) error {
 			}
 		case ion.IntType:
 			if name1 != nil && name1.Text != nil && *name1.Text == "page_index" {
-				if *name2.Text == "page_index" {
+				if *name2.Text != "page_index" {
 					return fmt.Errorf("different type of int page index")
 				}
-			} else {
-				size1, err := reader1.IntSize()
-				if err != nil {
-					return err
-				}
-				size2, err := reader2.IntSize()
-				if err != nil {
-					return err
-				}
+			}
 
-				if size1 != size2 {
-					return fmt.Errorf("not the same size")
-				}
+			size1, err := reader1.IntSize()
+			if err != nil {
+				return err
+			}
+			size2, err := reader2.IntSize()
+			if err != nil {
+				return err
+			}
 
-				val1, err := reader1.Int64Value()
-				if err != nil {
-					panic("Something went wrong while reading a Integer value: " + err.Error())
-				}
-				val2, err := reader2.Int64Value()
-				if err != nil {
-					panic("Something went wrong while reading a Integer value: " + err.Error())
-				}
+			if size1 != size2 {
+				return fmt.Errorf("not the same size")
+			}
 
-				if *val1 != *val2 {
-					return fmt.Errorf("different val1 val2")
-				}
+			val1, err := reader1.Int64Value()
+			if err != nil {
+				panic("Something went wrong while reading a Integer value: " + err.Error())
+			}
+			val2, err := reader2.Int64Value()
+			if err != nil {
+				panic("Something went wrong while reading a Integer value: " + err.Error())
+			}
+
+			if *val1 != *val2 {
+				return fmt.Errorf("different val1 val2")
 			}
 
 		case ion.StringType:
