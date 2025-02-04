@@ -3,7 +3,7 @@ package ionreader
 import (
 	"strings"
 
-	"github.com/amazon-ion/ion-go/ion"
+	"github.com/eadgyo-forked/ion-go/ion"
 )
 
 func IonToString(ion1 []byte) (string, error) {

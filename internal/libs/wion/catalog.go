@@ -1,6 +1,6 @@
 package wion
 
-import "github.com/amazon-ion/ion-go/ion"
+import "github.com/eadgyo-forked/ion-go/ion"
 
 type Ion_Symbol int
 

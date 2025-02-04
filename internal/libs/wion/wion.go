@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"regexp"
 
-	"github.com/amazon-ion/ion-go/ion"
+	"github.com/eadgyo-forked/ion-go/ion"
 )
 
 var regValue = regexp.MustCompile(`^(.*?)(,|$)`)

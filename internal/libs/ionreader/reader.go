@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/amazon-ion/ion-go/ion"
+	"github.com/eadgyo-forked/ion-go/ion"
 )
 
 func ReadDouble(ion1 []byte, ion2 []byte) error {
