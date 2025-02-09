@@ -254,6 +254,27 @@ func TestSerialize(t *testing.T) {
 			},
 		},
 		{
+			name:     "metadata",
+			expected: "e00100eaeea2820282de9d01a9be99de9701b272015f01aabe8ee68204d6826330e68204d6826341",
+			v: Metadata{
+				ReadingOrders: []ReadingOrder{
+					{
+						ReadingOrderName: Symbol{
+							Value: "default",
+						},
+						Sections: []Kfxid{
+							{
+								Id: "c0",
+							},
+							{
+								Id: "cA",
+							},
+						},
+					},
+				},
+			},
+		},
+		{
 			name:     "document_data",
 			expected: "e00100eaeebb82049adeb688211201c072017804c57201b904d5d904e5e68204d682643701a9be99de9701b272015f01aabe8ee68204d6826330e68204d6826341",
 			v: DocumentData{

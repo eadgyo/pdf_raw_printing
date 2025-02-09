@@ -4,6 +4,7 @@ go 1.23.1
 
 require (
 	github.com/eadgyo-forked/ion-go v1.5.1
+	github.com/google/uuid v1.6.0
 	github.com/mattn/go-sqlite3 v1.14.24
 	github.com/stretchr/testify v1.6.1
 )

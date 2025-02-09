@@ -36,8 +36,8 @@ type Eidbucket struct {
 
 // --- METADATA ---
 type ReadingOrder struct {
-	ReadingOrderName string   `wion:"reading_order_name"`
-	Sections         []string `wion:"sections"`
+	ReadingOrderName Symbol  `wion:"reading_order_name"`
+	Sections         []Kfxid `wion:"sections"`
 }
 
 type Metadata struct {

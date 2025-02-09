@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"pdf_raw_printing/internal/libs/wion"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -152,6 +153,15 @@ func CreateNewDB(filepath string) (*DB, error) {
 func (db *DB) InsertFragment(id string, payloadtype string, payloadvalue []byte) error {
 	_, err := db.db.Exec("INSERT INTO fragments (id, payload_type, payload_value) VALUES ($1, $2, $3)", id, payloadtype, payloadvalue)
 	return err
+}
+
+func (db *DB) InsertHashFragments(id string, payloadType string, v any) error {
+	hash24, err := wion.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	return db.InsertFragment(id, payloadType, hash24)
 }
 
 func (db *DB) InsertGCReachable(id string) error {
