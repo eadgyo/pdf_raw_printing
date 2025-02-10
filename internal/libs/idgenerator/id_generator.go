@@ -64,6 +64,10 @@ func gen(i int) string {
 	return s
 }
 
+func GetSize() int {
+	return len(alreadyKnown)
+}
+
 func Generate(prefix string) string {
 	var i int = 0
 	var ok bool
