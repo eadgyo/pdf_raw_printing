@@ -3,13 +3,15 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"os"
 	"pdf_raw_printing/internal/libs/wion"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 type DB struct {
-	db *sql.DB
+	db   *sql.DB
+	Path string
 }
 
 var defaultGCFragment = []string{
@@ -104,6 +106,13 @@ var defaultGCFragment = []string{
 }
 
 func CreateNewDB(filepath string) (*DB, error) {
+	_ = os.Remove(filepath)
+	f, err := os.Create(filepath)
+	if err != nil {
+		return nil, err
+	}
+	_ = f.Close()
+
 	db, err := sql.Open("sqlite3", filepath)
 	if err != nil {
 		return nil, err
@@ -113,7 +122,7 @@ func CreateNewDB(filepath string) (*DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	_, err = db.Exec("INSERT INTO capabilities (db.schema, 1)")
+	_, err = db.Exec("INSERT INTO capabilities VALUES ($1, $2)", "db.schema", 1)
 	if err != nil {
 		return nil, err
 	}
@@ -146,7 +155,8 @@ func CreateNewDB(filepath string) (*DB, error) {
 	}
 
 	return &DB{
-		db: db,
+		db:   db,
+		Path: filepath,
 	}, nil
 }
 

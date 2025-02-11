@@ -29,7 +29,12 @@ type KVEid struct {
 }
 
 func NewPdf(tempfolder string) (*PDF, error) {
-	myDB, err := db.CreateNewDB(tempfolder + "./temp.db")
+	myDB, err := db.CreateNewDB(tempfolder + "/temp.db")
+
+	if err != nil {
+		return nil, err
+	}
+
 	pdf := PDF{
 		db:         *myDB,
 		Sections:   []string{},
@@ -220,11 +225,6 @@ func (pdf *PDF) AddC0Spm(c0 string, c0spm string, t1 string, t3 string, i4 strin
 
 func (pdf *PDF) AddC0(c0 string, c0AD string, l2 string, t1 string, t3 string) error {
 	err := pdf.db.InsertFragmentProperties(c0, "child", c0AD)
-	if err != nil {
-		return err
-	}
-
-	err = pdf.db.InsertFragmentProperties(c0, "child", l2)
 	if err != nil {
 		return err
 	}
@@ -438,7 +438,7 @@ func (pdf *PDF) AddPage(i int) error {
 		return err
 	}
 
-	err = pdf.AddC0AD(c0)
+	err = pdf.AddC0AD(c0AD)
 	if err != nil {
 		return err
 	}
