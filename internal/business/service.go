@@ -17,6 +17,7 @@ type PDFInfo struct {
 	Title         string
 	Autor         string
 	Path          string
+	Id            string
 	NumberOfPages int
 }
 

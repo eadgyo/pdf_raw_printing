@@ -120,21 +120,6 @@ func CreateNewDB(filepath string) (*DB, error) {
 		return nil, err
 	}
 
-	// _, err = db.Query("DELETE FROM gc_fragment_properties")
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	// _, err = db.Exec("DELETE FROM fragments")
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	// _, err = db.Exec("DELETE FROM fragment_properties")
-	// if err != nil {
-	// 	panic(err)
-	// }
-
 	_, err = db.Exec(`CREATE TABLE capabilities(key char(20), version smallint, primary key (key, version)) without rowid;`)
 	if err != nil {
 		return nil, err

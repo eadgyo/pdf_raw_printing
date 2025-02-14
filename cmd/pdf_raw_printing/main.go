@@ -45,6 +45,11 @@ func main() {
 
 	headerBytes, _ := hex.DecodeString(header)
 	AddMissingSQLiteFile(cw+"/temp.db", headerBytes, cw+"/result.db")
+
+	err = business.CreateArborescence(os.Args[1], cw)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func copyDst(src string, dst string) {
