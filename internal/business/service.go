@@ -2,6 +2,7 @@ package business
 
 import (
 	"encoding/hex"
+	"path"
 	"pdf_raw_printing/internal/libs/db"
 	generator "pdf_raw_printing/internal/libs/idgenerator"
 	"strconv"
@@ -35,7 +36,7 @@ type KVEid struct {
 }
 
 func NewPdf(tempfolder string) (*PDF, error) {
-	myDB, err := db.CreateNewDB(tempfolder + "/temp.db")
+	myDB, err := db.CreateNewDB(path.Join(tempfolder, "temp.db"))
 
 	if err != nil {
 		return nil, err

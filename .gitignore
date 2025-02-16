@@ -2,3 +2,8 @@
 *.sqlite3
 
 **/.tempBook
+*.kfx
+*.kpf
+*.kcb
+
+build

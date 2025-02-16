@@ -2,6 +2,7 @@ package business
 
 import (
 	"os"
+	"path"
 
 	"github.com/google/uuid"
 )
@@ -88,31 +89,36 @@ func CreateJournal(tempfolder string) error {
 }
 
 func CreateArborescence(pdfpath string, tempfolder1 string) error {
-	err := os.Mkdir(tempfolder1+"/KPF", 0777)
+	err := os.Mkdir(path.Join(tempfolder1, "KPF"), 0777)
 	if err != nil {
 		panic(err)
 	}
 
-	tempfolder := tempfolder1 + "/KPF"
+	tempfolder := path.Join(tempfolder1, "KPF")
 	err = CreateKCB(tempfolder)
 	if err != nil {
 		return err
 	}
-	err = os.Mkdir(tempfolder+"/resources", 0777)
+	err = os.Mkdir(path.Join(tempfolder, "resources"), 0777)
 	if err != nil {
 		panic(err)
 	}
-	err = copyDst(tempfolder1+"/result.db", tempfolder+"/resources/book.kdf")
+	err = CreateManifestFile(tempfolder)
 	if err != nil {
 		return err
 	}
 
-	err = os.Mkdir(tempfolder+"/resources/res", 0777)
+	err = copyDst(path.Join(tempfolder1, "result.db"), path.Join(tempfolder, "resources", "book.kdf"))
+	if err != nil {
+		return err
+	}
+
+	err = os.Mkdir(path.Join(tempfolder, "resources", "/res"), 0777)
 	if err != nil {
 		panic(err)
 	}
 
-	err = copyDst(pdfpath, tempfolder+"/resources/res/rsrc8")
+	err = copyDst(pdfpath, path.Join(tempfolder, "resources", "res", "rsrc8"))
 	if err != nil {
 		return err
 	}
