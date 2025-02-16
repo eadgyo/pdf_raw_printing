@@ -39,7 +39,11 @@ func main() {
 	}
 	if folderPtr != nil && *folderPtr != "" {
 		options++
-		// search for file in folder
+		pdfs, err := searchFolder(*folderPtr)
+		if err != nil {
+			log.Fatal().Err(err)
+		}
+		elements = append(elements, pdfs...)
 	}
 	if kindlePtr != nil && *kindlePtr {
 		options++
@@ -103,6 +107,32 @@ func main() {
 			}
 		}
 	}
+}
+
+func searchFolder(rootpath string) ([]string, error) {
+	files, err := os.ReadDir(rootpath)
+	if err != nil {
+		return nil, err
+	}
+
+	filesPDF := []string{}
+
+	for _, file := range files {
+		if file.IsDir() {
+			//TODO: warning for links not handled here
+			filesPDFSub, err := searchFolder(path.Join(rootpath, file.Name()))
+			if err != nil {
+				return nil, err
+			}
+			filesPDF = append(filesPDF, filesPDFSub...)
+		}
+
+		if reg.MatchString(file.Name()) {
+			filesPDF = append(filesPDF, path.Join(rootpath, file.Name()))
+		}
+	}
+
+	return filesPDF, nil
 }
 
 func convertPDF(pdfpath string) (string, error) {
